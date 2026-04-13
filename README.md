@@ -148,4 +148,4 @@ SOFTWARE.
 
 ---
 
-Built by [Ayush Raj](https://github.com/ayushcmd) — IIT 
+Built by [Ayush Raj](https://github.com/ayushcmd) 
