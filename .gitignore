@@ -1,0 +1,20 @@
+build/bin
+node_modules
+frontend/dist
+frontend/node_modules
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+
+# Env
+.env
+.env.local
+
+# Wails dev
+/tmp
