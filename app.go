@@ -51,6 +51,12 @@ func (a *App) startup(ctx context.Context) {
 		time.Sleep(500 * time.Millisecond)
 		hideFromTaskbar()
 	}()
+	go func() {
+		for {
+			time.Sleep(1 * time.Second)
+			forceTopmost()
+		}
+	}()
 	counters, err := psnet.IOCounters(false)
 	if err == nil && len(counters) > 0 {
 		a.lastRecv = counters[0].BytesRecv
@@ -67,24 +73,45 @@ func hideFromTaskbar() {
 	getWindowThreadProcessId := user32.NewProc("GetWindowThreadProcessId")
 	setWindowLongW := user32.NewProc("SetWindowLongW")
 	getWindowLongW := user32.NewProc("GetWindowLongW")
+	setWindowPos := user32.NewProc("SetWindowPos")
 	pid := uint32(os.Getpid())
 	cb := syscall.NewCallback(func(hwnd uintptr, lparam uintptr) uintptr {
 		var windowPid uint32
 		getWindowThreadProcessId.Call(hwnd, uintptr(unsafe.Pointer(&windowPid)))
 		if windowPid == pid {
-			GWL_EXSTYLE := uintptr(0xFFFFFFEC)
-			GWL_STYLE   := uintptr(0xFFFFFFF0)
+			GWL_EXSTYLE      := uintptr(0xFFFFFFEC)
+			GWL_STYLE        := uintptr(0xFFFFFFF0)
 			WS_EX_TOOLWINDOW := uintptr(0x00000080)
 			WS_EX_APPWINDOW  := uintptr(0x00040000)
 			WS_SYSMENU       := uintptr(0x00080000)
-			// Hide from taskbar
+			HWND_TOPMOST     := uintptr(0xFFFFFFFF)
+			SWP_FLAGS        := uintptr(0x0012)
 			style, _, _ := getWindowLongW.Call(hwnd, GWL_EXSTYLE)
 			style = (style &^ WS_EX_APPWINDOW) | WS_EX_TOOLWINDOW
 			setWindowLongW.Call(hwnd, GWL_EXSTYLE, style)
-			// Remove close button
 			style2, _, _ := getWindowLongW.Call(hwnd, GWL_STYLE)
 			style2 = style2 &^ WS_SYSMENU
 			setWindowLongW.Call(hwnd, GWL_STYLE, style2)
+			setWindowPos.Call(hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_FLAGS)
+		}
+		return 1
+	})
+	enumWindows.Call(cb, 0)
+}
+
+func forceTopmost() {
+	user32 := syscall.NewLazyDLL("user32.dll")
+	enumWindows := user32.NewProc("EnumWindows")
+	getWindowThreadProcessId := user32.NewProc("GetWindowThreadProcessId")
+	setWindowPos := user32.NewProc("SetWindowPos")
+	pid := uint32(os.Getpid())
+	cb := syscall.NewCallback(func(hwnd uintptr, lparam uintptr) uintptr {
+		var windowPid uint32
+		getWindowThreadProcessId.Call(hwnd, uintptr(unsafe.Pointer(&windowPid)))
+		if windowPid == pid {
+			HWND_TOPMOST := uintptr(0xFFFFFFFF)
+			SWP_FLAGS    := uintptr(0x0012)
+			setWindowPos.Call(hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_FLAGS)
 		}
 		return 1
 	})

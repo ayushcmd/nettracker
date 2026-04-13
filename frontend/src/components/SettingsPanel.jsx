@@ -1,7 +1,18 @@
+import { useState, useEffect } from "react";
 import { Quit } from "../../wailsjs/runtime/runtime";
+import { GetStartup, SetStartup } from "../../wailsjs/go/main/App";
 
 export default function SettingsPanel({ settings, setSettings, theme, onClose }) {
   const update = (key, value) => setSettings(prev => ({ ...prev, [key]: value }));
+  const [startupEnabled, setStartupEnabled] = useState(false);
+
+  useEffect(() => {
+    GetStartup().then(setStartupEnabled).catch(() => {});
+  }, []);
+
+  const toggleStartup = (val) => {
+    SetStartup(val).then(() => setStartupEnabled(val)).catch(() => {});
+  };
 
   return (
     <div className="settings-panel" style={{
@@ -15,7 +26,7 @@ export default function SettingsPanel({ settings, setSettings, theme, onClose })
       <div className="settings-header">
         <span style={{ color: theme.brandColor, fontWeight: 700 }}>⚙ Settings</span>
         <div style={{ display: "flex", gap: 6 }}>
-          <button className="close-btn" style={{ color: "#ef4444" }} onClick={Quit} title="Quit NetTracker">⏻</button>
+          <button className="close-btn" style={{ color: "#ef4444" }} onClick={Quit} title="Quit">⏻</button>
           <button className="close-btn" style={{ color: theme.labelColor }} onClick={onClose}>✕</button>
         </div>
       </div>
@@ -33,10 +44,10 @@ export default function SettingsPanel({ settings, setSettings, theme, onClose })
               }}
               onClick={() => update("theme", t)}
             >
-              {t === "glassmorphism" && " Dafault"}
-              {t === "tokyonight" && " Tokyo Night"}
-              {t === "ironman" && " Iron Man"}
-              {t === "pacman" && " Pac-Man"}
+              {t === "glassmorphism" && "🔮 Glass"}
+              {t === "tokyonight" && "🌃 Tokyo"}
+              {t === "ironman" && "🔴 Iron Man"}
+              {t === "pacman" && "🟡 Pac-Man"}
             </button>
           ))}
         </div>
@@ -83,6 +94,15 @@ export default function SettingsPanel({ settings, setSettings, theme, onClose })
             </button>
           ))}
         </div>
+      </Section>
+
+      <Section label="System" color={theme.brandColor}>
+        <ToggleRow
+          label="Start with Windows"
+          value={startupEnabled}
+          onChange={toggleStartup}
+          theme={theme}
+        />
       </Section>
     </div>
   );

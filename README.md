@@ -45,13 +45,26 @@ The bar auto-sizes based on which stats are enabled. Settings open in the same w
 
 ## Download
 
-## Download
-
 Download the latest release: [NetTracker v1.0.0](https://github.com/ayushcmd/nettracker/releases/tag/v1.0.0)
 
 Direct download: [nettracker.exe](https://github.com/ayushcmd/nettracker/releases/latest/download/nettracker.exe)
 
 No installer required — just double-click to run. Requires Windows 10/11.
+
+### Note on Windows SmartScreen
+
+Windows or Microsoft Edge may show a security warning when downloading. This is expected for unsigned open-source applications. To proceed:
+
+- In Edge: click the download, select **Keep**, then **Keep anyway**
+- After download: if Windows shows "Windows protected your PC", click **More info** then **Run anyway**
+
+The source code is fully open and auditable above.
+
+### Note on Taskbar Overlap
+
+Windows reserves the taskbar area and does not allow other windows to appear above it by design. If you place NetTracker at the bottom of the screen it may overlap with or hide behind the taskbar.
+
+**Recommended:** drag the bar to the top of the screen for best experience.
 
 ---
 
@@ -95,6 +108,7 @@ Output: `build/bin/nettracker.exe`
 - **Settings > Theme** — switch between 4 themes
 - **Settings > Opacity** — adjust transparency
 - **Settings > Refresh Rate** — control update frequency
+- **Settings > System** — toggle Start with Windows
 - **Power button** in settings — quit the app
 
 ---
@@ -148,4 +162,4 @@ SOFTWARE.
 
 ---
 
-Built by [Ayush Raj](https://github.com/ayushcmd) 
+Built by [Ayush Raj](https://github.com/ayushcmd)
