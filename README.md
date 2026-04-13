@@ -45,7 +45,13 @@ The bar auto-sizes based on which stats are enabled. Settings open in the same w
 
 ## Download
 
-Go to [Releases](https://github.com/ayushcmd/nettracker/releases) and download the latest `nettracker.exe`. No installer required — just double-click to run.
+## Download
+
+Download the latest release: [NetTracker v1.0.0](https://github.com/ayushcmd/nettracker/releases/tag/v1.0.0)
+
+Direct download: [nettracker.exe](https://github.com/ayushcmd/nettracker/releases/latest/download/nettracker.exe)
+
+No installer required — just double-click to run. Requires Windows 10/11.
 
 ---
 
@@ -142,4 +148,4 @@ SOFTWARE.
 
 ---
 
-Built by [Ayush Raj](https://github.com/ayushcmd) — IIT Patna
+Built by [Ayush Raj](https://github.com/ayushcmd) — IIT 
